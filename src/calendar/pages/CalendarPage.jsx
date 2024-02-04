@@ -6,6 +6,7 @@ import { Navbar } from "../components/Navbar";
 import { CalendarEvent } from "../components/CalendarEvent";
 // helpers
 import { localizer, getMessagesES } from "../../helpers";
+import { useState } from "react";
 
 const events = [
   {
@@ -22,6 +23,10 @@ const events = [
 ];
 
 export const CalendarPage = () => {
+  const [lastView, setLastView] = useState(
+    localStorage.getItem("lastView") || "week"
+  );
+
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
       backgroundColor: "#347cf7",
@@ -35,6 +40,19 @@ export const CalendarPage = () => {
     };
   };
 
+  const onDoubleClick = (event) => {
+    console.log({ doubleClick: event });
+  };
+
+  const onSelect = (event) => {
+    console.log({ click: event });
+  };
+
+  const onViewChanged = (event) => {
+    localStorage.setItem("lastView", event);
+    setLastView(event);
+  };
+
   return (
     <>
       <Navbar />
@@ -44,6 +62,7 @@ export const CalendarPage = () => {
           culture="es"
           localizer={localizer}
           events={events}
+          defaultView={lastView}
           startAccessor="start"
           endAccessor="end"
           style={{ height: "calc(100vh - 80px)" }}
@@ -52,6 +71,9 @@ export const CalendarPage = () => {
           components={{
             event: CalendarEvent,
           }}
+          onDoubleClickEvent={onDoubleClick}
+          onSelectEvent={onSelect}
+          onView={onViewChanged}
         />
       </div>
     </>
