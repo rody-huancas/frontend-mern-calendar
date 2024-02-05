@@ -8,24 +8,12 @@ import { CalendarEvent } from "../components/CalendarEvent";
 import { localizer, getMessagesES } from "../../helpers";
 import { useState } from "react";
 import { CalendarModal } from "../components/CalendarModal";
-import { useUiStore } from "../../hooks/useUiStore";
-
-const events = [
-  {
-    title: "Cumpleaños del jefe",
-    notes: "Hay que comprar el pastel",
-    start: new Date(),
-    end: addHours(new Date(), 2),
-    bgColor: "#fafafa",
-    user: {
-      _id: "123",
-      name: "Rody",
-    },
-  },
-];
+import { useUiStore, useCalendarStore } from "../../hooks";
+import { FabAddNew } from "../components/FabAddNew";
 
 export const CalendarPage = () => {
   const { openDateModal } = useUiStore();
+  const { events, setActiveEvent } = useCalendarStore();
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "week"
   );
@@ -49,7 +37,8 @@ export const CalendarPage = () => {
   };
 
   const onSelect = (event) => {
-    console.log({ click: event });
+    // console.log({ click: event });
+    setActiveEvent(event);
   };
 
   const onViewChanged = (event) => {
@@ -81,6 +70,8 @@ export const CalendarPage = () => {
         />
 
         <CalendarModal />
+
+        <FabAddNew />
       </div>
     </>
   );
